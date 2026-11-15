@@ -1,0 +1,82 @@
+{
+  "log": [
+    {
+      "step": "year_params",
+      "rule": "год отсчёта 2026, максимальный год выпуска 2027 — из дат публикации",
+      "removed": 0,
+      "remaining": 295451
+    },
+    {
+      "step": "drop_columns",
+      "rule": "доля пропусков > 50%",
+      "removed": 1,
+      "remaining": 20,
+      "columns": [
+        "size"
+      ]
+    },
+    {
+      "step": "missing_target",
+      "rule": "удалены строки без id, price или year (в т.ч. «сдвинутые» строки с текстом вместо числа)",
+      "removed": 26,
+      "remaining": 295425
+    },
+    {
+      "step": "price_range",
+      "rule": "цена в диапазоне [500; 150000]",
+      "removed": 13322,
+      "remaining": 282103
+    },
+    {
+      "step": "price_placeholders",
+      "rule": "удалены цены-заглушки (11111, 123456 и т.п.)",
+      "removed": 134,
+      "remaining": 281969
+    },
+    {
+      "step": "year_range",
+      "rule": "год в диапазоне [1985; 2027]",
+      "removed": 9353,
+      "remaining": 272616
+    },
+    {
+      "step": "odometer_range",
+      "rule": "пробег в диапазоне [0; 500000] или пропуск",
+      "removed": 460,
+      "remaining": 272156
+    },
+    {
+      "step": "odometer_placeholder",
+      "rule": "пробег < 100 миль у авто старше 1 года -> пропуск (NaN): 947 значений",
+      "removed": 0,
+      "remaining": 272156,
+      "converted_to_nan": 947
+    },
+    {
+      "step": "price_equals_odometer",
+      "rule": "удалены строки, где цена совпадает с пробегом (ошибка ввода)",
+      "removed": 115,
+      "remaining": 272041
+    },
+    {
+      "step": "duplicates_vin",
+      "rule": "удалены повторы по корректному VIN (одно авто — несколько объявлений)",
+      "removed": 79870,
+      "remaining": 192171
+    },
+    {
+      "step": "duplicates_same_car",
+      "rule": "удалены повторы по году+марке+модели+точному пробегу (то же авто без VIN)",
+      "removed": 27947,
+      "remaining": 164224
+    },
+    {
+      "step": "normalize",
+      "rule": "нижний регистр, strip, пропуски категорий -> 'unknown'",
+      "removed": 0,
+      "remaining": 164224
+    }
+  ],
+  "n_clean": 164224,
+  "memory_mb_clean": 9.1
+}

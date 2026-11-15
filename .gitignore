@@ -1,0 +1,17 @@
+# Большие и воспроизводимые файлы не коммитим
+data/raw/*
+!data/raw/.gitkeep
+data/synthetic/
+data/processed/*
+!data/processed/.gitkeep
+models/*.joblib
+# Python и окружение
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+# Личные заметки для подготовки к защите
+docs/
+# Папки outputs/ и presentation/, файл models/model_meta.json коммитятся: это результаты работы

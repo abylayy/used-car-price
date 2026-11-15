@@ -1,0 +1,21 @@
+manufacturer,model_name,n_listings,model_avg_price,manufacturer_avg_price,premium_ratio
+ford,f350 xl,130,64858.0,17220.0,3.77
+ram,promaster 3500,190,67658.0,23789.0,2.84
+bmw,x7,53,45655.0,16107.0,2.83
+ford,f600 xlt,66,47800.0,17220.0,2.78
+ford,f550 flatbed,67,47276.0,17220.0,2.75
+bmw,m3,80,44045.0,16107.0,2.73
+ford,f350 dump truck,67,47073.0,17220.0,2.73
+hyundai,ioniq 5,62,26866.0,9975.0,2.69
+hyundai,palisade,109,25117.0,9975.0,2.52
+ford,f-550 super duty,80,42128.0,17220.0,2.45
+mercedes-benz,sprinter,82,41437.0,17796.0,2.33
+ford,f550 xl dump truck,65,39900.0,17220.0,2.32
+jeep,gladiator,108,32052.0,13877.0,2.31
+kia,telluride,89,24173.0,10700.0,2.26
+chevrolet,silverado 1500 rst,60,34672.0,15745.0,2.2
+ford,f-450,69,35032.0,17220.0,2.03
+porsche,911,71,64712.0,31872.0,2.03
+ford,f-250 f-series super duty - single rear wheel,51,34566.0,17220.0,2.01
+jeep,grand cherokee l,50,27838.0,13877.0,2.01
+honda,passport,63,23837.0,12222.0,1.95

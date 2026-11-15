@@ -1,0 +1,67 @@
+{
+  "n_rows": 295451,
+  "n_cols": 21,
+  "missing_pct": {
+    "id": 0.0,
+    "region": 0.0,
+    "price": 0.0,
+    "year": 0.01,
+    "manufacturer": 3.65,
+    "model": 1.14,
+    "condition": 45.86,
+    "cylinders": 27.13,
+    "fuel": 0.38,
+    "odometer": 1.37,
+    "title_status": 2.31,
+    "transmission": 0.53,
+    "VIN": 40.99,
+    "drive": 23.82,
+    "size": 100.0,
+    "type": 5.35,
+    "paint_color": 25.29,
+    "state": 0.0,
+    "lat": 0.05,
+    "long": 0.05,
+    "posting_date": 0.0
+  },
+  "duplicates_full_without_id": 64,
+  "duplicates_by_valid_vin": 83165,
+  "invalid_values": {
+    "price_missing_or_leq_0": 10288,
+    "price_below_500": 12653,
+    "price_above_150000": 680,
+    "price_placeholder_values": 160,
+    "odometer_negative": 0,
+    "odometer_below_100": 3520,
+    "price_equals_odometer": 192,
+    "odometer_above_500000": 781,
+    "year_outside_1985_2027": 9734
+  },
+  "iqr_bounds": {
+    "price": {
+      "q1": 6200.0,
+      "q3": 22500.0,
+      "low": -18250.0,
+      "high": 46950.0,
+      "n_outliers": 17558
+    },
+    "odometer": {
+      "q1": 67626.5,
+      "q3": 147372.0,
+      "low": -51991.75,
+      "high": 266990.25,
+      "n_outliers": 4924
+    },
+    "year": {
+      "q1": 2010.0,
+      "q3": 2019.0,
+      "low": 1996.5,
+      "high": 2032.5,
+      "n_outliers": 16326
+    }
+  },
+  "posting_date_min": "2026-09-30 07:17:53",
+  "posting_date_max": "2026-11-03 04:41:25",
+  "posting_span_days": 33,
+  "coerced_non_numeric_values": 0
+}
