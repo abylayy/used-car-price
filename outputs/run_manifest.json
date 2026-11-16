@@ -1,9 +1,10 @@
 {
   "stages": [
+    "report",
     "presentation"
   ],
-  "elapsed_seconds": 0.4,
-  "finished_at": "2026-11-16 13:31:00",
+  "elapsed_seconds": 0.7,
+  "finished_at": "2026-11-16 21:22:56",
   "python": "3.13.2",
   "pandas": "3.0.6",
   "scikit-learn": "1.9.1",
@@ -28,7 +29,7 @@
     "outputs\\figures\\permutation_importance.png": 0.045,
     "outputs\\figures\\residuals.png": 0.247,
     "outputs\\report\\REPORT.docx": 0.924,
-    "outputs\\report\\REPORT.md": 0.039,
+    "outputs\\report\\REPORT.md": 0.038,
     "outputs\\results\\audit_raw.json": 0.001,
     "outputs\\results\\cleaning_log.json": 0.003,
     "outputs\\results\\db_summary.json": 0.003,

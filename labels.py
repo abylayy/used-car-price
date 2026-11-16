@@ -49,6 +49,14 @@ FIELD_TITLES = {
     "title_status": "Статус документов", "state": "Штат США",
 }
 
+# Русские названия признаков модели (для графика важности признаков)
+FEATURE_TITLES = {
+    **FIELD_TITLES, "car_age": "Возраст автомобиля", "odometer": "Пробег", "manufacturer": "Марка",
+    "model": "Модель", "make_model": "Марка + модель", "region": "Регион", "state": "Штат",
+    "lat": "Широта", "long": "Долгота", "cylinders_num": "Число цилиндров (число)",
+    "miles_per_year": "Пробег за год",
+}
+
 
 def _plural_cylinders(n: int) -> str:
     return "цилиндра" if n in (2, 3, 4) else "цилиндров"

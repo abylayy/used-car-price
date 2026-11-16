@@ -98,8 +98,8 @@ def plot_diagnostics(pred_df: pd.DataFrame, importance: pd.DataFrame, model_name
 
 def generate_findings(results: pd.DataFrame, importance: pd.DataFrame, errors: dict,
                       interval_quality: dict = None) -> dict:
-    """Формирует выводы ТОЛЬКО из полученных таблиц результатов (никакого заранее заданного текста
-    о качестве моделей). Каждый пункт — это предложение с подставленными фактическими числами.
+    """Формирует выводы из таблиц результатов: каждый пункт — предложение с подставленными числами,
+    поэтому текст выводов не расходится с последним запуском.
     """
     items = []
 

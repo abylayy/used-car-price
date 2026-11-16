@@ -2,19 +2,19 @@
   "loading_benchmark": [
     {
       "method": "CSV: pandas.read_csv без оптимизации",
-      "seconds": 19.89,
+      "seconds": 17.12,
       "memory_mb": 84.7,
       "file_mb": 1109.5
     },
     {
       "method": "CSV: chunksize + оптимизация типов",
-      "seconds": 18.43,
+      "seconds": 13.61,
       "memory_mb": 22.8,
       "file_mb": 1109.5
     },
     {
       "method": "Parquet (после конвертации)",
-      "seconds": 0.64,
+      "seconds": 0.47,
       "memory_mb": 22.8,
       "file_mb": 9.8
     }

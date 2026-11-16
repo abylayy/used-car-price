@@ -198,9 +198,6 @@ def main(argv=None):
         print(f"ОШИБКА: {exc}")
         return 1
     write_manifest(stages, time.perf_counter() - t0)
-    if any("укажите" in value for member in config.TEAM for value in member.values()):
-        print("ВНИМАНИЕ: заполните список TEAM в config.py (ФИО, группа, вклад) и повторите "
-              "python main.py --stage report presentation")
     print(f"Готово за {time.perf_counter() - t0:.0f} с. Манифест запуска: {config.MANIFEST_PATH}")
     return 0
 

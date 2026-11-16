@@ -1,4 +1,4 @@
-"""Консольное меню проекта (требование 7). Запуск: python app_console.py"""
+"""Консольное меню проекта. Запуск: python app_console.py"""
 from pathlib import Path
 
 import pandas as pd

@@ -104,7 +104,7 @@ class TestCleaning(unittest.TestCase):
 class TestSQL(unittest.TestCase):
     def test_all_queries_run_on_tiny_database(self):
         queries = database.load_queries()
-        self.assertGreaterEqual(len(queries), 8)               # требование: не менее 8 запросов
+        self.assertGreaterEqual(len(queries), 8)               # в проекте не менее 8 запросов
         with tempfile.TemporaryDirectory() as tmp:
             db = Path(tmp) / "t.db"
             counts = database.build_database(tiny_frame(), db)

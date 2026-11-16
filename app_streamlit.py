@@ -12,6 +12,7 @@ import predict
 st.set_page_config(page_title="Оценка стоимости автомобиля", layout="wide")
 
 OTHER = "Другая модель…"
+NAVY, TEAL, AMBER = "#14213D", "#1F7A8C", "#F2A900"     # цвета графиков, как в презентации
 
 
 @st.cache_resource
@@ -63,6 +64,7 @@ def available_years(years, brand, model):
 
 
 st.title("Оценка стоимости автомобиля")
+st.caption("Прогноз цены подержанного автомобиля по объявлениям Craigslist (США). Цены в долларах, пробег в милях.")
 tab_pred, tab_data, tab_model = st.tabs(["Оценка", "Данные", "О модели"])
 
 # ------------------------------------------------------------------ Оценка
@@ -81,6 +83,7 @@ with tab_pred:
                             format_func=labels.pretty)
         options = models_by_brand.get(brand, []) + [OTHER]
         choice = b.selectbox("Модель", options, key=f"model_{brand}",
+                             index=options.index("camry") if "camry" in options else 0,
                              format_func=lambda m: m if m == OTHER else labels.pretty(m))
         model_name = choice
         if choice == OTHER:
@@ -89,7 +92,10 @@ with tab_pred:
         c, d = st.columns(2)
         year_options = available_years(years_by_model, brand, model_name)
         year_counts = years_by_model.get((brand, model_name), {})
+        # по умолчанию — год, за который объявлений больше всего
+        best_year = max(year_counts, key=year_counts.get) if year_counts else year_options[0]
         year = c.selectbox("Год выпуска", year_options, key=f"year_{brand}_{model_name}",
+                           index=year_options.index(best_year),
                            format_func=lambda y: f"{y} · мало данных" if year_counts and year_counts.get(y, 0) < 3 else str(y))
         low_data = bool(year_counts) and year_counts.get(year, 0) < 3
 
@@ -116,19 +122,44 @@ with tab_pred:
         with st.container(border=True):
             try:
                 result = predict.predict_price(bundle, values)
-                st.caption("Примерная цена")
-                st.markdown(f"<div style='font-size:3.2rem;font-weight:700;line-height:1.1'>${result['price']:,.0f}</div>",
-                            unsafe_allow_html=True)
-                st.markdown(f"Интервал: **${result['low']:,.0f} – ${result['high']:,.0f}**")
+                st.caption(f"Примерная цена · {labels.pretty(brand)} {labels.pretty(model_name)}, {year}")
+                st.markdown(f"<div style='font-size:3.4rem;font-weight:700;line-height:1.1;color:{NAVY}'>"
+                            f"${result['price']:,.0f}</div>", unsafe_allow_html=True)
+                st.markdown(f"Обычно такие авто стоят **${result['low']:,.0f} – ${result['high']:,.0f}**")
+                asking = st.number_input("Цена в объявлении, $ (необязательно)", 0, 10 * config.PRICE_MAX, 0, step=500,
+                                         help="Введите цену продавца, чтобы сравнить её с рынком.")
+                if asking:
+                    verdict = predict.rate_asking_price(asking, result)
+                    # цвет сообщения: зелёный — ниже рынка, жёлтый — выше, синий — в пределах интервала
+                    if verdict.startswith("ниже"):
+                        show = st.success
+                    elif verdict.startswith("выше"):
+                        show = st.warning
+                    else:
+                        show = st.info
+                    show(f"Цена ${asking:,.0f} — {verdict}.")
+
+                # Где прогноз находится среди настоящих объявлений о таких же автомобилях
+                similar = hist[(hist["manufacturer"] == brand) & (hist["model"] == model_name)
+                               & hist["year"].between(year - 1, year + 1)]
+                if len(similar) >= 10:
+                    fig = px.histogram(similar, x="price", nbins=30, color_discrete_sequence=["#9FB3C8"],
+                                       labels={"price": "Цена, $"})
+                    fig.add_vrect(x0=result["low"], x1=result["high"], fillcolor=TEAL, opacity=0.15, line_width=0)
+                    fig.add_vline(x=result["price"], line_color=NAVY, line_width=3, annotation_text="прогноз")
+                    if asking:
+                        fig.add_vline(x=asking, line_color=AMBER, line_width=3, line_dash="dash",
+                                      annotation_text="объявление", annotation_position="bottom right")
+                    fig.update_layout(height=240, margin=dict(l=0, r=0, t=25, b=0), yaxis_title="Объявлений")
+                    st.plotly_chart(fig, width="stretch")
+                    st.caption(f"Цены {len(similar):,} похожих объявлений ({year - 1}–{year + 1} гг.). "
+                               f"Закрашенная полоса — интервал прогноза.")
                 st.caption(f"В интервал попадает около {meta['interval']['coverage']:.0%} похожих объявлений. "
                            f"Средняя ошибка модели — ${meta['metrics']['MAE']:,.0f}, у дорогих авто она больше.")
                 if low_data:
                     st.caption("Для этого года мало объявлений — оценка менее точна.")
                 if unknown_odo:
                     st.caption("Без пробега оценка менее точна.")
-                asking = st.number_input("Цена в объявлении, $ (необязательно)", 0, 10 * config.PRICE_MAX, 0, step=500)
-                if asking:
-                    st.info(f"Цена ${asking:,.0f} — {predict.rate_asking_price(asking, result)}.")
             except ValueError as exc:
                 st.error(str(exc))
 
@@ -160,15 +191,17 @@ with tab_data:
         m2.metric("Медианная цена", f"${view['price'].median():,.0f}")
         m3.metric("Медианный пробег", f"{view['odometer'].median():,.0f} миль")
         g1, g2 = st.columns(2)
-        s = view.dropna(subset=["odometer"]).sample(min(len(view), 12000), random_state=1).copy()
+        s = view.dropna(subset=["odometer"])
+        s = s.sample(min(len(s), 12000), random_state=1).copy()
         s["Марка"] = s["manufacturer"].map(labels.pretty)
         g1.markdown("**Цена и пробег** · одна точка — одно объявление")
         g1.plotly_chart(px.scatter(s, x="odometer", y="price", color="Марка" if 0 < len(sel) <= 8 else None,
-                                   opacity=0.5, labels={"odometer": "Пробег, миль", "price": "Цена, $"}),
+                                   opacity=0.5, color_discrete_sequence=[TEAL] if not 0 < len(sel) <= 8 else None,
+                                   labels={"odometer": "Пробег, миль", "price": "Цена, $"}),
                         width="stretch")
         g2.markdown("**Цена по годам выпуска** · медиана")
         by_year = view.groupby("year", observed=True)["price"].median().reset_index()
-        g2.plotly_chart(px.line(by_year, x="year", y="price", markers=True,
+        g2.plotly_chart(px.line(by_year, x="year", y="price", markers=True, color_discrete_sequence=[TEAL],
                                 labels={"year": "Год выпуска", "price": "Медианная цена, $"}), width="stretch")
 
 # ------------------------------------------------------------------ О модели
@@ -176,15 +209,29 @@ with tab_model:
     try:
         _, meta = get_model()
         m = meta["metrics"]
-        a, b, c = st.columns(3)
+        a, b, c, d = st.columns(4)
         a.metric("Средняя ошибка (MAE)", f"${m['MAE']:,.0f}")
-        b.metric("RMSE", f"${m['RMSE']:,.0f}")
+        b.metric("Половина прогнозов точнее", f"${m['MedAE']:,.0f}")
         c.metric("R²", f"{m['R2']:.2f}")
-        st.caption(f"Модель: {meta['best_model']}. Метрики посчитаны на объявлениях, которых модель не видела при обучении.")
+        d.metric("Цена внутри интервала", f"{meta['interval']['coverage']:.0%}")
+        st.caption(f"Модель: {meta['best_model']}, обучена на {meta['n_rows_clean']:,} объявлений. "
+                   f"Метрики посчитаны на объявлениях, которых модель не видела при обучении.")
     except FileNotFoundError:
         st.info("Модель ещё не обучена: python main.py --stage train")
+    left, right = st.columns(2)
     path = config.RESULTS_DIR / "model_comparison.csv"
     if path.exists():
         comp = pd.read_csv(path)[["model", "MAE", "RMSE", "R2", "fit_seconds"]]
         comp.columns = ["Модель", "MAE, $", "RMSE, $", "R²", "Обучение, с"]
+        left.markdown("**Сравнение моделей** · средняя ошибка на тесте, чем меньше, тем лучше")
+        left.plotly_chart(px.bar(comp, x="Модель", y="MAE, $", text_auto=",.0f", color_discrete_sequence=[TEAL]),
+                          width="stretch")
+    imp_path = config.RESULTS_DIR / "permutation_importance.csv"
+    if imp_path.exists():
+        imp = pd.read_csv(imp_path).head(10).iloc[::-1]
+        imp["Признак"] = imp["feature"].map(lambda f: labels.FEATURE_TITLES.get(f, f))
+        right.markdown("**Что сильнее всего влияет на цену** · 10 главных признаков")
+        right.plotly_chart(px.bar(imp, x="importance", y="Признак", orientation="h", color_discrete_sequence=[TEAL],
+                                  labels={"importance": "Рост ошибки, если признак перемешать"}), width="stretch")
+    if path.exists():
         st.dataframe(comp.round(2), hide_index=True, width="stretch")

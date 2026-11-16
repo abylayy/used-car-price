@@ -1,6 +1,6 @@
 {
   "best_model": "lightgbm",
-  "trained_at": "2026-11-16T13:03:03",
+  "trained_at": "2026-11-16T21:21:49",
   "model_file": "best_model.joblib",
   "n_rows_clean": 164483,
   "metrics": {

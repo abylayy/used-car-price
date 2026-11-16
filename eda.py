@@ -129,7 +129,7 @@ def run_eda(df: pd.DataFrame, sql_results: dict = None, raw_missing: dict = None
     fig_i.write_html(html_path, include_plotlyjs="cdn")
     figures.append(html_path)
 
-    # 10. Выбросы в СЫРЫХ данных (до очистки): boxplot цены и пробега в логарифмической шкале
+    # 10. Выбросы в сырых данных (до очистки): boxplot цены и пробега в логарифмической шкале
     if raw is not None:
         fig, axes = plt.subplots(1, 2, figsize=(13, 3.8))
         for ax, col, title in zip(axes, ["price", "odometer"], ["Цена, $", "Пробег, миль"]):

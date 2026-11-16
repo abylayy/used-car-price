@@ -152,7 +152,7 @@ def clean_data(df: pd.DataFrame) -> tuple:
     record("price_equals_odometer", "удалены строки, где цена совпадает с пробегом (ошибка ввода)", n0, len(df))
 
     # 6. Дубликаты. Одно авто часто размещают повторно: в соседних регионах или с немного другой ценой.
-    #    Оставляем самое свежее объявление. Удаляем ДО разбиения на train/test, иначе будет утечка.
+    #    Оставляем самое свежее объявление. Удаляем до разбиения на train/test, иначе будет утечка.
     df = df.sort_values("posting_date")
     n0 = len(df)
     vin = _as_text(df["VIN"])
@@ -184,7 +184,7 @@ def clean_data(df: pd.DataFrame) -> tuple:
 
 
 def save_json(obj: dict, path) -> None:
-    """Сохраняет словарь в JSON (работа с файлами, требование 5)."""
+    """Сохраняет словарь в JSON; папка создаётся, если её нет."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2, default=str)
