@@ -1,21 +1,21 @@
 region_name,state,n_listings,avg_price
-muskegon,mi,102,37774.0
+muskegon,mi,110,40162.0
 visalia-tulare,ca,109,30861.0
 prescott,az,166,26964.0
 salt lake city,ut,103,25375.0
-billings,mt,269,24456.0
-anchorage / mat-su,ak,824,22318.0
-spokane / coeur d'alene,wa,2241,22180.0
-hawaii,hi,2744,21862.0
-bozeman,mt,237,21773.0
+billings,mt,273,25099.0
+anchorage / mat-su,ak,866,23190.0
+spokane / coeur d'alene,wa,2244,22171.0
+hawaii,hi,2744,21901.0
+bozeman,mt,237,21689.0
 odessa / midland,tx,105,21548.0
 pueblo,co,290,20989.0
 grand forks,nd,214,20673.0
-omaha / council bluffs,ne,914,19482.0
+omaha / council bluffs,ne,916,19482.0
 bellingham,wa,462,19400.0
 wilmington,nc,127,19370.0
-charlotte,nc,1134,19288.0
+charlotte,nc,1135,19303.0
 huntsville / decatur,al,386,18899.0
 missoula,mt,376,18698.0
 wenatchee,wa,309,18696.0
-tulsa,ok,650,18521.0
+tulsa,ok,653,18624.0

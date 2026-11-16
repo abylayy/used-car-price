@@ -3,96 +3,96 @@
     "manufacturers": 43,
     "models": 24199,
     "regions": 412,
-    "listings": 164224
+    "listings": 164483
   },
   "queries": [
     {
       "query": "q01_top_manufacturers",
       "desc": "[JOIN x2, GROUP BY, HAVING] Топ-20 марок по числу объявлений, средняя цена и пробег",
       "rows": 20,
-      "seconds": 0.163,
+      "seconds": 0.158,
       "error": null
     },
     {
       "query": "q02_price_by_year",
       "desc": "[GROUP BY, HAVING] Средняя цена и пробег по году выпуска (кривая «обесценивания»)",
       "rows": 43,
-      "seconds": 0.334,
+      "seconds": 0.373,
       "error": null
     },
     {
       "query": "q03_state_price_rank",
       "desc": "[JOIN, GROUP BY, HAVING, оконная функция RANK] Рейтинг штатов по средней цене",
       "rows": 50,
-      "seconds": 0.095,
+      "seconds": 0.106,
       "error": null
     },
     {
       "query": "q04_model_premium",
       "desc": "[CTE x2, JOIN x3] Модели, цена которых сильнее всего отличается от средней по марке",
       "rows": 20,
-      "seconds": 1.444,
+      "seconds": 1.556,
       "error": null
     },
     {
       "query": "q05_top3_models_per_manufacturer",
       "desc": "[CTE, оконная функция ROW_NUMBER с PARTITION BY] Три самые дорогие модели каждой марки",
       "rows": 90,
-      "seconds": 0.602,
+      "seconds": 0.802,
       "error": null
     },
     {
       "query": "q06_overpriced_vs_model_average",
       "desc": "[CTE, JOIN x3, GROUP BY] Число объявлений с ценой > 2.5 средних по своей модели, по маркам",
       "rows": 15,
-      "seconds": 0.749,
+      "seconds": 0.958,
       "error": null
     },
     {
       "query": "q07_yoy_price_change",
       "desc": "[CTE, оконная функция LAG] Изменение средней цены по сравнению с предыдущим годом выпуска",
       "rows": 43,
-      "seconds": 0.358,
+      "seconds": 0.392,
       "error": null
     },
     {
       "query": "q08_body_type_share_by_fuel",
       "desc": "[GROUP BY, HAVING, SUM() OVER PARTITION BY] Доля типов кузова внутри каждого вида топлива",
       "rows": 44,
-      "seconds": 0.127,
+      "seconds": 0.133,
       "error": null
     },
     {
       "query": "q09_odometer_bucket_moving_avg",
       "desc": "[CTE, оконная функция AVG OVER ROWS BETWEEN] Цена по корзинам пробега со скользящим средним",
       "rows": 12,
-      "seconds": 0.087,
+      "seconds": 0.088,
       "error": null
     },
     {
       "query": "q10_regions_above_average",
       "desc": "[JOIN, GROUP BY, HAVING + скалярный подзапрос] Регионы, где средняя цена выше средней по всей базе",
       "rows": 20,
-      "seconds": 0.499,
+      "seconds": 0.413,
       "error": null
     },
     {
       "query": "q11_brand_pareto",
       "desc": "[CTE, оконная функция SUM OVER (нарастающий итог)] Накопленная доля рынка по маркам",
       "rows": 25,
-      "seconds": 0.062,
+      "seconds": 0.059,
       "error": null
     }
   ],
   "pandas_vs_sql": [
     {
       "method": "SQL (SQLite, JOIN + GROUP BY)",
-      "seconds": 0.1187,
+      "seconds": 0.1166,
       "result_rows": 37
     },
     {
       "method": "Pandas (groupby)",
-      "seconds": 0.006,
+      "seconds": 0.0084,
       "result_rows": 37
     }
   ]

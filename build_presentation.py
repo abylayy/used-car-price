@@ -243,8 +243,10 @@ def build() -> str:
                  "Programming for Data Analysis and Database",
                  "Applied Artificial Intelligence, магистратура"], 0.8, 4.5, 8.2, 1.2, size=16,
              color="C9D3E3", spacing=3)
-    add_text(s, "Авторы: " + ", ".join(f"{m['name']} ({m['group']})" for m in config.TEAM),
-             0.8, 6.2, 8.4, 0.8, size=14, color=AMBER)
+    # вклад участников должен быть виден на слайде (требование к командным проектам); подробности — в отчёте
+    add_text(s, [("Авторы и вклад", {"size": 13, "bold": True, "color": AMBER})]
+             + [f"{m['name']} ({m['group']}) — {m['role'].split(' (')[0]}" for m in config.TEAM],
+             0.8, 5.75, 8.4, 1.3, size=11, color="C9D3E3", spacing=2)
     s.notes_slide.notes_text_frame.text = "Вклад участников: " + "; ".join(
         f"{m['name']} — {m['role']}" for m in config.TEAM)
 
@@ -362,7 +364,7 @@ def build() -> str:
              ["Год выпуска", f"{config.YEAR_MIN}–{config.YEAR_MAX}"],
              ["Пробег", f"≤ {config.ODOMETER_MAX:,}; < {config.ODOMETER_MIN_USED} у подержанных → NaN"],
              ["Цена = пробег", "удаляется (ошибка ввода)"],
-             ["Дубликаты", "VIN; год + марка + модель + пробег"], ["Пропуски категорий", "→ unknown"]]
+             ["Дубликаты", "VIN; без VIN: год + марка + модель + пробег"], ["Пропуски категорий", "→ unknown"]]
     add_table(s, rules, 0.6, 1.8, 5.2, [2, 3], row_h=0.47, size=13, name="Правила очистки")
     add_text(s, "IQR вычисляется справочно: дорогие авто — не ошибки данных.", 0.6, 5.8, 5.2, 0.7, size=13, color=MUTED)
     if R.clean:

@@ -81,6 +81,7 @@ class TestCleaning(unittest.TestCase):
             {**good, "price": 9200.0, "state": "tx"},              # 7: то же авто, что и 0, с другой ценой
             {**good, "model": "Kuga", "VIN": "1FADP3F20FL123456"},  # 8 и 9: одинаковый VIN
             {**good, "model": "Kuga", "VIN": "1fadp3f20fl123456", "price": 8800.0, "odometer": 80500.0},
+            {**good, "model": "Kuga", "VIN": "1FADP3F20FL654321", "odometer": 80500.0},  # 10: другой VIN — другое авто
         ]
         raw = pd.DataFrame(rows)
         raw["id"] = range(len(raw))
@@ -93,11 +94,11 @@ class TestCleaning(unittest.TestCase):
             finally:
                 config.PROCESSED_DIR = processed_dir
                 config.load_data_params()
-        self.assertEqual(sorted(clean["id"]), [6, 7, 9])           # из повторов остаётся самое свежее объявление
+        self.assertEqual(sorted(clean["id"]), [6, 7, 9, 10])       # из повторов остаётся самое свежее объявление
         self.assertTrue(np.isnan(clean.loc[clean["id"] == 6, "odometer"].iloc[0]))
         self.assertEqual(set(clean["manufacturer"]), {"ford"})     # нижний регистр
         self.assertNotIn("size", clean.columns)                    # столбец без данных удалён
-        self.assertEqual(log[-1]["remaining"], 3)
+        self.assertEqual(log[-1]["remaining"], 4)
 
 
 class TestSQL(unittest.TestCase):

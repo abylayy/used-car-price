@@ -153,7 +153,8 @@ def train_and_compare(df: pd.DataFrame, verbose: bool = True) -> dict:
         with MemoryProbe() as mem:
             pipe.fit(X_train, y_train)
         fit_time = time.perf_counter() - t0
-        row = {"model": name, "best_params": str(search.best_params_),
+        best_params = {k: round(float(v), 4) if isinstance(v, float) else v for k, v in search.best_params_.items()}
+        row = {"model": name, "best_params": str(best_params),   # для таблицы; в модель идут точные значения
                "cv_rmse_log": -search.best_score_, "tune_seconds": tune_time,
                "fit_seconds": fit_time, "peak_memory_mb": mem.peak_delta_mb,
                "model_size_mb": model_size_mb(pipe)}

@@ -161,10 +161,15 @@ def clean_data(df: pd.DataFrame) -> tuple:
     record("duplicates_vin", "удалены повторы по корректному VIN (одно авто — несколько объявлений)",
            n0, len(df))
     n0 = len(df)
-    same_car = df.duplicated(subset=["year", "manufacturer", "model", "odometer"], keep="last")
-    df = df[~(same_car & df["odometer"].notna())]
-    record("duplicates_same_car", "удалены повторы по году+марке+модели+точному пробегу (то же авто без VIN)",
-           n0, len(df))
+    # Объявления с VIN уже уникальны (разные VIN — разные автомобили), поэтому здесь удаляются только
+    # объявления без VIN. При поиске повторов строки с VIN ставим в конец (порядок по дате внутри сохраняется):
+    # если у того же авто есть объявление с VIN, остаётся оно, иначе — самое свежее.
+    has_vin = valid_vin.loc[df.index].notna()
+    order = has_vin.sort_values(kind="stable").index
+    same_car = df.loc[order].duplicated(subset=["year", "manufacturer", "model", "odometer"], keep="last")
+    df = df[~(same_car.loc[df.index] & ~has_vin & df["odometer"].notna())]
+    record("duplicates_same_car", "удалены объявления без VIN, повторяющие год+марку+модель+точный пробег "
+           "другого объявления (то же авто)", n0, len(df))
 
     # 7. Нормализация категорий: нижний регистр, пробелы, пропуски -> 'unknown'
     for col in config.CATEGORICAL_RAW:

@@ -1,8 +1,8 @@
 {
   "target_coverage": 0.8,
-  "coverage": 0.7775612726442381,
-  "share_below": 0.1100015223017202,
-  "share_above": 0.11243720505404171,
-  "median_width_usd": 7409.702521384027,
-  "median_width_pct_of_price": 68.75932646410567
+  "coverage": 0.7751770678177341,
+  "share_below": 0.11353618871021674,
+  "share_above": 0.11128674347204913,
+  "median_width_usd": 7310.104059792521,
+  "median_width_pct_of_price": 68.5887284031409
 }
